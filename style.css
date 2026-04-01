@@ -1,0 +1,237 @@
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Pacifico', cursive;
+}
+
+body {
+  margin: 0;
+  height: 100vh;
+  background: linear-gradient(-45deg, #ffe3ec, #fef6e4, #fde2e4, #fff1e6);
+  background-size: 400% 400%;
+  animation: gradientBG 10s ease infinite;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+@keyframes gradientBG {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+
+.container {
+  position: relative;
+  width: 70vw;       /* chiếm 70% chiều rộng viewport */
+  max-width: 400px;  /* nhưng không vượt quá 400px */
+  height: auto;      /* chiều cao tự động theo ảnh */
+  aspect-ratio: 1 / 1; /* giữ tỷ lệ vuông */
+  z-index: 9999;
+}
+
+.gift-box,
+.box-body,
+.box-lid {
+  position: absolute;
+  width: 100%;
+  height: 100%;  /* để lấp đầy container vuông */
+  object-fit: contain; /* giữ tỉ lệ ảnh, không bị méo */
+  cursor: pointer;
+  transition: all 0.5s ease;
+  top: 0;
+  left: 0;
+}
+
+.box-body,
+.box-lid {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.open .gift-box {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.open .box-body {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.open .box-lid {
+  opacity: 1;
+  animation: liftLid 2s ease forwards;
+}
+
+/* Nắp hộp bay lên rồi biến mất */
+@keyframes liftLid {
+  0% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  80% {
+    transform: translateY(-120px);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-120px);
+    opacity: 0;
+  }
+}
+
+/* Thân hộp di chuyển xuống */
+.drop .box-body {
+  animation: dropBox 2s ease forwards;
+}
+
+@keyframes dropBox {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(40vh); /* di chuyển xuống 40% chiều cao viewport */
+  }
+}
+
+/* Hiệu ứng nhịp tim */
+.gift-box {
+  animation: heartbeat 3s infinite;
+}
+
+@keyframes heartbeat {
+  0%, 100% { transform: scale(1); }
+  25% { transform: scale(1.2); }
+  50% { transform: scale(1); }
+  75% { transform: scale(1.1); }
+}
+
+/* ❤️ Trái tim tỏa ra */
+.heart {
+  position: absolute;
+  font-size: 2vw;
+  color: #e255a1;
+  opacity: 0;
+  animation: fly 1.5s ease forwards;
+  pointer-events: none;
+  user-select: none;
+}
+
+@keyframes fly {
+  0% {
+    opacity: 1;
+    transform: translate(0, 0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--x), var(--y)) scale(1.5);
+  }
+}
+
+/* 🌟 Pháo hoa (hạt nhỏ) */
+.spark {
+  position: absolute;
+  width: 1.5px;
+  height: 1.5px;
+  background: #ff3cac;
+  border-radius: 50%;
+  opacity: 0;
+  animation: explode 1.2s ease-out forwards;
+  pointer-events: none;
+  user-select: none;
+  filter: drop-shadow(0 0 2px #ff3cac);
+}
+
+@keyframes explode {
+  0% {
+    transform: translate(0, 0) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(var(--x), var(--y)) scale(0.5);
+    opacity: 0;
+  }
+}
+
+.lava {
+  border-radius: 20%;
+  position: absolute;
+  width: 5vw;       /* ban đầu chiếm 5% chiều rộng viewport */
+  max-width: 150px;  /* không quá 150px */
+  opacity: 0;
+  pointer-events: none;
+  user-select: none;
+  animation: lavaUp 3s ease forwards;
+  will-change: transform, opacity;
+}
+
+@keyframes lavaUp {
+  0% {
+    transform: translate(0, 0) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(var(--x), var(--y)) scale(5);
+    opacity: 0;
+  }
+}
+
+#fireworks {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  pointer-events: none; /* để không cản click */
+}
+
+/* Container chữ chúc mừng */
+.message-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  gap: 0.4em;
+  font-size: 4vw;
+  color: #e255a1;
+  font-weight: bold;
+  opacity: 0;
+  pointer-events: none;
+  user-select: none;
+}
+.message-container span {
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+
+@keyframes bounceUpDown {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+.message-container span {
+  opacity: 0;
+  transition: opacity 0.6s ease;
+  display: inline-block;
+}
+
+@media (max-width: 768px) {
+  .container {
+    width: 50vw;       
+    max-width: none;   
+  }
+  .message-container {
+    font-size: 4vw;
+  }
+  .heart {
+    font-size: 3vw;    
+  }
+  .lava {
+    width: 100%;        
+  }
+}
